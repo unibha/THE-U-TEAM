@@ -9,12 +9,45 @@ document.addEventListener("DOMContentLoaded", () => {
     registrationForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const contact = document.getElementById("contact").value.trim();
+        const emailValue = emailField.value.trim();
         const passwordValue = passwordField.value;
         const confirmPasswordValue = confirmPasswordField.value;
-        const emailValue = emailField.value;
+
+        if (firstName === "") {
+            alert("Validation Error: First Name is required.");
+            return;
+        }
+
+        if (lastName === "") {
+            alert("Validation Error: Last Name is required.");
+            return;
+        }
+
+        if (emailValue === "") {
+            alert("Validation Error: Email Address is required.");
+            return;
+        }
 
         if (!emailValue.includes('@') || !emailValue.includes('.')) {
             alert("Validation Error: Please enter a correctly formatted email address.");
+            return;
+        }
+
+        if (contact === "") {
+            alert("Validation Error: Contact Number is required.");
+            return;
+        }
+
+        if (!/^\d{7,15}$/.test(contact)) {
+            alert("Validation Error: Please enter a valid contact number (7 to 15 digits).");
+            return;
+        }
+
+        if (passwordValue === "") {
+            alert("Validation Error: Password is required.");
             return;
         }
 
@@ -23,39 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
             return; 
         }
 
-        if (passwordValue.length < 8) {
-            alert("Security Error: Password must be at least 8 characters long.");
+        if (passwordValue.length < 6) {
+            alert("Security Error: Password must be at least 6 characters long.");
             return; 
         }
-        
 
         const selectedRoleElement = document.querySelector('input[name="role"]:checked');
         const selectedRole = selectedRoleElement ? selectedRoleElement.value : 'Student';
-        const firstName = document.getElementById("firstName").value;
-        const lastName = document.getElementById("lastName").value;
-        const contact = document.getElementById("contact").value;
-
-        const backendPayload = {
-            firstName: firstName,
-            lastName: lastName,
-            email: emailValue,
-            contactNumber: contact,
-            role: selectedRole,
-            password: passwordValue 
-        };
-
         const originalBtnText = submitButton.innerText;
-        submitButton.innerText = "Creating Account...";
+        submitButton.innerText = "Submitting to PHP server...";
         submitButton.style.opacity = "0.7";
-
-        setTimeout(() => {
-            console.log("Payload securely submitted to backend:", backendPayload);
-            alert(`Registration Complete!\nWelcome ${firstName} ${lastName}! Your ${selectedRole} account is active.`);
-            
-            registrationForm.reset();
-            submitButton.innerText = originalBtnText;
-            submitButton.style.opacity = "1";
-        }, 1200);
-
+        registrationForm.submit();
     });
 });
