@@ -1,228 +1,40 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: system-ui, sans-serif;
-}
-
 body {
-    background: linear-gradient(135deg, #fff0f5, #f3e8ff);
-    color: #374151;
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    min-height: 100vh;
+  font-family: Arial;
+  background: #eef2f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.page {
-    width: 100%;
-    max-width: 850px;
+.main {
+  display: flex;
+  gap: 50px;
 }
 
-.registration-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.08);
-    overflow: hidden;
-}
-
-.card-header {
-    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
-    color: #fff;
-    padding: 40px;
-    text-align: center;
+.left {
+  text-align: center;
 }
 
 .logo {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+  font-size: 40px;
+  background: blue;
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 }
 
-.card-header h2 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-    font-weight: 600;
+.card {
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
 }
 
-.card-header p {
-    font-size: 0.95rem;
-    color: #fce7f3;
-}
-
-.form-body {
-    padding: 40px 50px;
-}
-
-.form-section {
-    margin-bottom: 35px;
-    padding-bottom: 25px;
-    border-bottom: 2px dashed #f1f5f9;
-}
-
-.form-section:last-of-type {
-    border: none;
-    margin-bottom: 20px;
-    padding: 0;
-}
-
-.section-title {
-    font-size: 1.1rem;
-    color: #8b5cf6;
-    margin-bottom: 22px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-
-.input-row {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 25px;
-}
-
-.input-row:last-child {
-    margin-bottom: 0;
-}
-
-.input-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 8px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 14px 18px;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 1.05rem;
-    background: #f8fafc;
-    outline: none;
-    transition: 0.25s;
-}
-
-.input-group input:hover,
-.input-group input:focus {
-    background: #fff;
-}
-
-.input-group input:focus {
-    border-color: #f43f5e;
-    box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.12);
-}
-
-.input-group input::placeholder {
-    color: #94a3b8;
-}
-
-.role-selection {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-}
-
-.role-card {
-    cursor: pointer;
-}
-
-.role-card input {
-    display: none;
-}
-
-.role-content {
-    border: 2px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 35px 20px;
-     min-width: 240px;
-    text-align: center;
-    transition: 0.25s;
-    background: #f8fafc;
-}
-
-.role-content .icon {
-    font-size: 1.8rem;
-    display: block;
-    margin-bottom: 12px;
-}
-
-.role-content h4 {
-    font-size: 1.1rem;
-    color: #1e293b;
-    font-weight: 600;
-}
-
-.role-card input:checked + .role-content {
-    border-color: #8b5cf6;
-    background: #faf5ff;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.12);
-}
-
-.role-card input:checked + .role-content h4 {
-    color: #8b5cf6;
-}
-
-.form-actions {
-    margin-top: 40px;
-    text-align: center;
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
-    color: #fff;
-    font-size: 1.15rem;
-    font-weight: 700;
-    padding: 16px 40px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.25s;
-    width: 100%;
-    box-shadow: 0 8px 20px rgba(244, 63, 94, 0.25);
-}
-
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(244, 63, 94, 0.35);
-}
-
-.btn-submit:active {
-    transform: translateY(0);
-}
-
-.login-link {
-    margin-top: 25px;
-    font-size: 0.95rem;
-    color: #64748b;
-}
-
-.login-link a {
-    color: #f43f5e;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.login-link a:hover {
-    color: #be123c;
-    text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-    .input-row {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .role-selection {
-        grid-template-columns: 1fr;
-    }
-    .form-body {
-        padding: 30px 20px;
-    }
+input, select {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
 }
