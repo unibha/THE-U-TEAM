@@ -1,6 +1,5 @@
 <?php
-// PHP Backend logic goes here!
-// Your friend will write the database connection and form processing here.
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect POST data
     $firstName = $_POST['firstName'] ?? '';
@@ -10,7 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'] ?? '';
     $role = $_POST['role'] ?? '';
 
-    // Example: echo a simulated success message temporarily (delete this later)
     echo "<script>alert('Test: Form POST submitted to PHP successfully, $firstName!');</script>";
     
     // TODO: Write database INSERTS here
@@ -79,7 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Section 2: Role Selection -->
                 <div class="form-section">
                     <h3 class="section-title">Select Role</h3>
-                    <!-- Clear and functional Radio button implementation disguised as sleek cards -->
                     <div class="role-selection">
                         <label class="role-card">
                             <input type="radio" name="role" value="Student" checked>
