@@ -40,7 +40,7 @@ try {
     // Fetch Upcoming Tasks (Assignments)
     $stmt = $pdo->prepare("
         SELECT a.*, c.course_name 
-        FROM assignments a 
+        FROM assignment a 
         JOIN courses c ON a.course_id = c.id 
         JOIN enrollments e ON c.id = e.course_id 
         WHERE e.student_id = ? AND a.due_date >= NOW() 
@@ -82,8 +82,9 @@ try {
                 <ul>
                     <li><a href="profile.php"><i class="fas fa-user"></i> <span>Account</span></a></li>
                     <li><a href="student_dashboard.php"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                    <li><a href="view_assignments.php"><i class="fas fa-file-alt"></i> <span>Assignment</span></a></li>
+                    <li><a href="view_assignment.php"><i class="fas fa-file-alt"></i> <span>Assignment</span></a></li>
                     <li><a href="view_attendance.php"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
+                    <li><a href="view_notice.php"><i class="fas fa-bullhorn"></i> <span>Notices</span></a></li>
                     <li><a href="notifications.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
                     <li><a href="logout.php" class="logout-link" style="margin-top: 50px; color: #f43f5e;"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
                 </ul>

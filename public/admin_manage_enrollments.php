@@ -33,6 +33,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['enroll_student'])) {
                 $stmt->execute([$class_name, $student_id]);
             }
 
+            // 3. Notify all parties
+            require_once '../includes/notification_helper.php';
+            
+            // Get Student and Course info for message
+            $sData = $pdo->prepare("SELECT u.first_name, u.last_name, s.user_id FROM students s JOIN users u ON s.user_id = u.id WHERE s.id = ?");
+            $sData->execute([$student_id]);
+            $sData = $sData->fetch();
+            $sName = $sData['first_name'] . ' ' . $sData['last_name'];
+            
+            $cData = $pdo->prepare("SELECT course_name FROM courses WHERE id = ?");
+            $cData->execute([$course_id]);
+            $cName = $cData->fetchColumn();
+
+            // Notify Admin
+            notifyAdmins("New Enrollment: $sName", "Student $sName has been successfully enrolled in $cName.", 'System');
+            // Notify Teacher
+            notifyTeacher($course_id, "New Student Enrolled", "Student $sName has joined your module: $cName.", 'Academic');
+            // Notify Student
+            sendNotification($sData['user_id'], "Enrolled in $cName", "You have been successfully enrolled in the $cName course.", 'Academic');
+
             $pdo->commit();
             $message = "Student successfully enrolled in course catalog!";
         } catch (PDOException $e) {

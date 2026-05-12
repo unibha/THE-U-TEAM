@@ -24,7 +24,7 @@ if ($role == 'Teacher') {
 // Handle Delete
 if (isset($_GET['delete_id'])) {
     try {
-        $stmt = $pdo->prepare("DELETE FROM assignments WHERE id = ?");
+        $stmt = $pdo->prepare("DELETE FROM assignment WHERE id = ?");
         $stmt->execute([$_GET['delete_id']]);
         $message = "Assignment removed successfully!";
     } catch (PDOException $e) {
@@ -43,9 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_assignment'])) {
         $error = "Module and Title are mandatory.";
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO assignments (course_id, title, description, due_date) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO assignment (course_id, title, description, due_date) VALUES (?, ?, ?, ?)");
             $stmt->execute([$course_id, $title, $description, $due_date]);
-            $message = "New assignment published! <a href='manage_assignments.php?course_id=$course_id' style='color: #166534; font-weight: 700;'>Reload View</a>";
+            
+            // Trigger Notification for enrolled students
+            require_once '../includes/notification_helper.php';
+            $cName = $pdo->prepare("SELECT course_name FROM courses WHERE id = ?");
+            $cName->execute([$course_id]);
+            $cName = $cName->fetchColumn();
+            
+            notifyEnrolledStudents($course_id, "New Assignment: $title", "A new assignment has been published for $cName. Due date: $due_date", 'Academic');
+            
+            $message = "New assignment published! <a href='manage_assignment.php?course_id=$course_id' style='color: #166534; font-weight: 700;'>Reload View</a>";
         } catch (PDOException $e) {
             $error = "Publishing error: " . $e->getMessage();
         }
@@ -79,7 +88,7 @@ if ($selected_course && $role == 'Teacher') {
 $assignments = [];
 if ($selected_course) {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM assignments WHERE course_id = ? ORDER BY due_date ASC");
+        $stmt = $pdo->prepare("SELECT * FROM assignment WHERE course_id = ? ORDER BY due_date ASC");
         $stmt->execute([$selected_course]);
         $assignments = $stmt->fetchAll();
     } catch (PDOException $e) { $assignments = []; }

@@ -34,7 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_course'])) {
         try {
             $stmt = $pdo->prepare("INSERT INTO courses (course_name, course_code, teacher_id) VALUES (?, ?, ?)");
             $stmt->execute([$course_name, $course_code, $teacher_id]);
-            $message = "New course added successfully!";
+            
+            // Trigger Notification
+            require_once '../includes/notification_helper.php';
+            // Notify Admins
+            notifyAdmins("New Course Added: $course_name", "A new course ($course_code) has been added to the system curriculum.", 'System');
+            
+            // Notify Teacher if assigned
+            if ($teacher_id) {
+                $teacherUser = $pdo->prepare("SELECT user_id FROM teachers WHERE id = ?");
+                $teacherUser->execute([$teacher_id]);
+                $tUid = $teacherUser->fetchColumn();
+                if ($tUid) {
+                    sendNotification($tUid, "New Course Assigned: $course_name", "You have been assigned as the lead instructor for the new course: $course_name ($course_code).", 'Academic');
+                }
+            }
+            
+            $notifStatus = "System alerted all Administrators";
+            if ($teacher_id && isset($tUid)) $notifStatus .= " and the Lead Instructor";
+            
+            $message = "New course added successfully! ($notifStatus)";
         } catch (PDOException $e) {
             $error = ($e->getCode() == 23000) ? "Course code must be unique." : "Error: " . $e->getMessage();
         }

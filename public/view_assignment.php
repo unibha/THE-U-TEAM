@@ -19,7 +19,7 @@ try {
     // 2. Fetch all assignments for enrolled courses
     $stmt = $pdo->prepare("
         SELECT a.*, c.course_name, c.course_code
-        FROM assignments a
+        FROM assignment a
         JOIN courses c ON a.course_id = c.id
         JOIN enrollments e ON c.id = e.course_id
         WHERE e.student_id = ?

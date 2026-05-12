@@ -18,7 +18,7 @@ $assignmentId = $_GET['id'] ?? 0;
 try {
     $stmt = $pdo->prepare("
         SELECT a.*, c.course_name, c.teacher_id
-        FROM assignments a
+        FROM assignment a
         JOIN courses c ON a.course_id = c.id
         WHERE a.id = ?
     ");
@@ -26,7 +26,7 @@ try {
     $assignment = $stmt->fetch();
 
     if (!$assignment) {
-        header("Location: manage_assignments.php");
+        header("Location: manage_assignment.php");
         exit();
     }
 
@@ -37,7 +37,7 @@ try {
         $teacherInternalId = $stmt2->fetchColumn();
         
         if ($assignment['teacher_id'] != $teacherInternalId) {
-            header("Location: manage_assignments.php?error=Access Denied");
+            header("Location: manage_assignment.php?error=Access Denied");
             exit();
         }
     }
@@ -55,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Title is mandatory.";
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE assignments SET title = ?, description = ?, due_date = ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE assignment SET title = ?, description = ?, due_date = ? WHERE id = ?");
             $stmt->execute([$title, $description, $due_date, $assignmentId]);
-            $message = "Assignment updated successfully! <a href='manage_assignments.php?course_id=" . $assignment['course_id'] . "' style='color: #166534; font-weight: 700;'>Return to List</a>";
+            $message = "Assignment updated successfully! <a href='manage_assignment.php?course_id=" . $assignment['course_id'] . "' style='color: #166534; font-weight: 700;'>Return to List</a>";
             
             // Refresh local data
             $assignment['title'] = $title;
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p>Portal > Edit Assignment</p>
         </div>
         <div class="header-icons" style="margin-left: 20px; display: flex; gap: 15px; align-items: center;">
-            <a href="manage_assignments.php?course_id=<?php echo $assignment['course_id']; ?>" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;">Back to Tasks</a>
+            <a href="manage_assignment.php?course_id=<?php echo $assignment['course_id']; ?>" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;">Back to Tasks</a>
         </div>
     </header>
 

@@ -31,7 +31,7 @@ try {
             </div>
             <div class="header-icons" style="margin-left: 20px; display: flex; gap: 20px; align-items: center;">
                 <a href="logout.php" class="header-logout" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; transition: all 0.3s ease;">Logout</a>
-                <button class="icon-btn" style="background:none; border:none; color:#fff; font-size: 1.2rem; cursor:pointer;"><i class="fas fa-bell"></i></button>
+                <a href="notifications.php" class="icon-btn" style="background:none; border:none; color:#fff; font-size: 1.2rem; cursor:pointer;"><i class="fas fa-bell"></i></a>
 
             </div>
         </div>
@@ -51,10 +51,6 @@ try {
                 <span>Account</span>
             </a>
 
-            <a href="admin_manage_assignments.php" class="teacher-tile-card">
-                <i class="fas fa-file-invoice"></i>
-                <span>Assignments</span>
-            </a>
             <a href="admin_manage_users.php?role=Student" class="teacher-tile-card">
                 <i class="fas fa-user-graduate"></i>
                 <span>Students</span>
@@ -67,7 +63,7 @@ try {
                 <i class="fas fa-book"></i>
                 <span>Courses</span>
             </a>
-            <a href="manage_assignments.php" class="teacher-tile-card">
+            <a href="manage_assignment.php" class="teacher-tile-card">
                 <i class="fas fa-file-alt"></i>
                 <span>Assignment</span>
             </a>
@@ -79,7 +75,16 @@ try {
                 <i class="fas fa-link"></i>
                 <span>Enroll Student</span>
             </a>
+            <a href="manage_notice.php" class="teacher-tile-card">
+                <i class="fas fa-bullhorn"></i>
+                <span>Notices</span>
+            </a>
+            <a href="notifications.php" class="teacher-tile-card">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </a>
         </div>
+
     </main>
 </div>
 

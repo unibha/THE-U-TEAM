@@ -51,6 +51,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mark_attendance'])) {
                     ON DUPLICATE KEY UPDATE status = VALUES(status)
                 ");
                 $stmt->execute([$student_id, $course_id, $date, $status]);
+                
+                // Trigger Notification
+                require_once '../includes/notification_helper.php';
+                $studentUser = $pdo->prepare("SELECT user_id FROM students WHERE id = ?");
+                $studentUser->execute([$student_id]);
+                $sUid = $studentUser->fetchColumn();
+                
+                $courseName = $pdo->prepare("SELECT course_name FROM courses WHERE id = ?");
+                $courseName->execute([$course_id]);
+                $cName = $courseName->fetchColumn();
+
+                if ($sUid) {
+                    sendNotification($sUid, "Attendance Marked: $cName", "Your attendance for $cName on $date has been marked as: $status.", 'Attendance');
+                }
             }
             $pdo->commit();
             $message = "Attendance processed for $date!";

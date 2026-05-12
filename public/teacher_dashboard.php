@@ -73,7 +73,7 @@ try {
                 <i class="fas fa-user-graduate"></i>
                 <span>Students</span>
             </a>
-            <a href="manage_assignments.php" class="teacher-tile-card">
+            <a href="manage_assignment.php" class="teacher-tile-card">
                 <i class="fas fa-file-alt"></i>
                 <span>Assignment</span>
             </a>
@@ -81,11 +81,16 @@ try {
                 <i class="fas fa-calendar-check"></i>
                 <span>Attendance</span>
             </a>
+            <a href="view_notice.php" class="teacher-tile-card">
+                <i class="fas fa-bullhorn"></i>
+                <span>Notices</span>
+            </a>
             <a href="notifications.php" class="teacher-tile-card">
                 <i class="fas fa-bell"></i>
                 <span>Notifications</span>
             </a>
         </div>
+
     </main>
 </div>
 

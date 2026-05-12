@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assignments`
+-- Table structure for table `assignment`
 --
 
-CREATE TABLE `assignments` (
+CREATE TABLE `assignment` (
   `id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE `assignments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `assignments`
+-- Dumping data for table `assignment`
 --
 
-INSERT INTO `assignments` (`id`, `course_id`, `title`, `description`, `due_date`, `created_at`) VALUES
+INSERT INTO `assignment` (`id`, `course_id`, `title`, `description`, `due_date`, `created_at`) VALUES
 (1, 1, 'workshop1', '', '2026-04-16 23:59:00', '2026-04-04 11:01:09'),
 (2, 1, 'workshop1', '', '2026-04-16 23:59:00', '2026-04-04 11:01:22'),
 (3, 1, 'sss', '', '2026-04-11 23:59:00', '2026-04-04 15:38:20'),
@@ -395,6 +395,41 @@ ALTER TABLE `teachers`
 --
 ALTER TABLE `teacher_attendance`
   ADD CONSTRAINT `teacher_attendance_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notice`
+--
+
+CREATE TABLE `notice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `category` enum('General','Urgent','Academic') DEFAULT 'General',
+  `target_audience` enum('All','Students','Teachers') DEFAULT 'All',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `type` varchar(50) DEFAULT 'System',
+  `is_read` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
