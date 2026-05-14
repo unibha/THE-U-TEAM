@@ -81,7 +81,7 @@ try {
                 
                 <div class="search-wrapper" style="margin: 30px auto 0; width: 400px; position: relative;">
                     <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                    <input type="text" id="examSearch" placeholder="Search exams or courses..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; font-weight: 600; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                    <input type="text" id="examSearch" placeholder="Search exams or courses..." style="width: 100%; padding: 12px 15px 12px 45px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; color: #1e293b; font-weight: 600; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                 </div>
             </section>
 

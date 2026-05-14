@@ -108,4 +108,11 @@ function timeAgo($timestamp) {
     if ($diff < 86400) return round($diff / 3600) . "h ago";
     return date('M d', $time);
 }
+
+/**
+ * Notify all admins
+ */
+function notifyAdmins($title, $message, $type = 'System', $isUrgent = 0) {
+    return notifyRole('Admin', $title, $message, $type, $isUrgent);
+}
 ?>

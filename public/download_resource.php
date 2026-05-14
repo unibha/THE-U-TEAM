@@ -6,27 +6,44 @@ require_once '../includes/db.php';
 checkAuth();
 
 $fileId = $_GET['id'] ?? '';
+$type = $_GET['type'] ?? 'resource';
 
 if (!$fileId) {
     die("Invalid request.");
 }
 
-$stmt = $pdo->prepare("SELECT * FROM resources WHERE resource_id = ?");
-$stmt->execute([$fileId]);
-$resource = $stmt->fetch();
-
-if (!$resource) {
-    die("File not found.");
+if ($type === 'submission') {
+    $stmt = $pdo->prepare("SELECT * FROM submissions WHERE submission_id = ?");
+} else {
+    $stmt = $pdo->prepare("SELECT * FROM resources WHERE resource_id = ?");
 }
 
-$filePath = $resource['file_path']; // This is 'uploads/resources/...'
+$stmt->execute([$fileId]);
+$item = $stmt->fetch();
+
+if (!$item) {
+    die("File not found in database.");
+}
+
+// In the database, paths are usually stored as 'uploads/resources/filename' or 'uploads/submissions/filename'
+// These are relative to the 'public/' directory where this script lives.
+$filePath = $item['file_path'];
 $fullPath = __DIR__ . '/' . $filePath;
 
+// Check if file exists on disk
 if (file_exists($fullPath)) {
-    // Set headers to force download or view
+    // Determine mime type if not stored
+    $mimeType = isset($item['file_type']) ? $item['file_type'] : '';
+    if (!$mimeType) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $fullPath);
+        finfo_close($finfo);
+    }
+
+    // Set headers to force download
     header('Content-Description: File Transfer');
-    header('Content-Type: ' . $resource['file_type']);
-    header('Content-Disposition: inline; filename="' . $resource['file_name'] . '"');
+    header('Content-Type: ' . $mimeType);
+    header('Content-Disposition: attachment; filename="' . $item['file_name'] . '"');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
@@ -34,11 +51,15 @@ if (file_exists($fullPath)) {
     readfile($fullPath);
     exit;
 } else {
-    echo "<h1>File Debug Info</h1>";
-    echo "<b>DB Path:</b> " . htmlspecialchars($filePath) . "<br>";
-    echo "<b>Resolved Path:</b> " . htmlspecialchars($fullPath) . "<br>";
-    echo "<b>Directory:</b> " . __DIR__ . "<br>";
-    echo "<b>Existence:</b> " . (file_exists($fullPath) ? "YES" : "NO") . "<br>";
-    die("<br>Please tell me what the information above says!");
+    // If not found, try one level up if the path was stored differently
+    $altPath = dirname(__DIR__) . '/' . $filePath;
+    if (file_exists($altPath)) {
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $item['file_name'] . '"');
+        readfile($altPath);
+        exit;
+    }
+    
+    die("File not found on server.");
 }
 ?>

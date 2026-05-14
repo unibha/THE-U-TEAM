@@ -54,11 +54,11 @@ try {
                    u_e.first_name as e_fname, u_e.last_name as e_lname,
                    e.exam_name, e.total_marks, c.course_name
             FROM marks m
-            JOIN students s ON m.student_id = s.id
-            JOIN users u_s ON s.user_id = u_s.id
-            JOIN users u_e ON m.entered_by = u_e.id
-            JOIN exam e ON m.exam_id = e.id
-            JOIN courses c ON m.course_id = c.id
+            LEFT JOIN students s ON m.student_id = s.id
+            LEFT JOIN users u_s ON s.user_id = u_s.id
+            LEFT JOIN users u_e ON m.entered_by = u_e.id
+            LEFT JOIN exam e ON m.exam_id = e.id
+            LEFT JOIN courses c ON m.course_id = c.id
             WHERE m.exam_id = ?
             ORDER BY u_s.first_name ASC
         ");
