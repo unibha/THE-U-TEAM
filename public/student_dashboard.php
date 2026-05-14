@@ -7,6 +7,8 @@ checkAuth(['Student']);
 
 $pageTitle = "Student Dashboard";
 include_once '../includes/header.php';
+require_once '../includes/notification_helper.php';
+include_once '../includes/notification_logic.php';
 
 $studentId = $_SESSION['user_id'];
 
@@ -69,8 +71,33 @@ try {
             </div>
             <div class="header-icons" style="margin-left: 20px; display: flex; gap: 20px; align-items: center;">
                 <a href="logout.php" class="header-logout" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; transition: all 0.3s ease;">Logout</a>
-                <a href="notifications.php" class="icon-btn" style="background:none; border:none; color:#fff; font-size: 1.2rem; cursor:pointer;"><i class="fas fa-bell"></i></a>
+                
+                <!-- Notification Bell -->
+                <div class="notif-wrapper" onclick="toggleNotifDropdown(event)">
+                    <i class="fas fa-bell" style="color: #fff; font-size: 1.2rem;"></i>
+                    <?php if (isset($unreadCount) && $unreadCount > 0): ?>
+                        <span class="notif-badge"><?php echo $unreadCount; ?></span>
+                    <?php endif; ?>
 
+                    <div class="notif-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
+                        <div class="notif-header">
+                            <span style="font-weight: 800; color: #1e293b; font-size: 0.9rem;">Notifications</span>
+                            <a href="notifications.php" style="font-size: 0.75rem; color: #8b5cf6; font-weight: 700; text-decoration: none;">View All</a>
+                        </div>
+                        <div class="notif-list">
+                            <?php if (empty($recentNotifs)): ?>
+                                <div style="padding: 30px; text-align: center; color: #94a3b8; font-weight: 600; font-size: 0.85rem;">No notifications yet</div>
+                            <?php else: ?>
+                                <?php foreach ($recentNotifs as $rn): ?>
+                                    <a href="notifications.php?read=<?php echo $rn['id']; ?>" class="notif-item <?php echo $rn['is_read'] ? '' : 'unread'; ?>">
+                                        <span class="title"><?php echo htmlspecialchars($rn['title']); ?></span>
+                                        <span class="time"><?php echo timeAgo($rn['created_at']); ?></span>
+                                    </a>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -82,9 +109,12 @@ try {
                 <ul>
                     <li><a href="profile.php"><i class="fas fa-user"></i> <span>Account</span></a></li>
                     <li><a href="student_dashboard.php"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
-                    <li><a href="view_assignment.php"><i class="fas fa-file-alt"></i> <span>Assignment</span></a></li>
+                    <li><a href="student_assignments.php"><i class="fas fa-file-alt"></i> <span>Assignment</span></a></li>
                     <li><a href="view_attendance.php"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
-                    <li><a href="view_notice.php"><i class="fas fa-bullhorn"></i> <span>Notices</span></a></li>
+                    <li><a href="view_exam.php"><i class="fas fa-file-signature"></i> <span>Exams</span></a></li>
+                    <li><a href="view_marks.php"><i class="fas fa-graduation-cap"></i> <span>My Results</span></a></li>
+                    <li><a href="view_timetable.php"><i class="fas fa-calendar-alt"></i> <span>Timetable</span></a></li>
+                    <li><a href="student_view_resources.php"><i class="fas fa-folder-open"></i> <span>Resources</span></a></li>
                     <li><a href="notifications.php"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
                     <li><a href="logout.php" class="logout-link" style="margin-top: 50px; color: #f43f5e;"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
                 </ul>
