@@ -1,36 +1,44 @@
 <?php
-session_start();
 $pageTitle = "Academic Registration";
+require_once '../includes/csrf_helper.php';
+require_once '../includes/validation_helper.php';
+require_once '../includes/db.php';
 
 $signup_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect POST data
-    $firstName = $_POST['firstName'] ?? '';
-    $lastName = $_POST['lastName'] ?? '';
+    // 1. Validate CSRF
+    validate_csrf();
+
+    // 2. Collect & Sanitize POST data
+    $firstName = sanitize($_POST['firstName'] ?? '');
+    $lastName = sanitize($_POST['lastName'] ?? '');
     $dobDay = $_POST['dobDay'] ?? '';
     $dobMonth = $_POST['dobMonth'] ?? '';
     $dobYear = $_POST['dobYear'] ?? '';
     $dob = ($dobDay && $dobMonth && $dobYear) ? "$dobYear-" . str_pad($dobMonth, 2, "0", STR_PAD_LEFT) . "-" . str_pad($dobDay, 2, "0", STR_PAD_LEFT) : '';
-    $address = $_POST['address'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $contact = $_POST['contact'] ?? '';
-    $motherName = $_POST['motherName'] ?? '';
-    $fatherName = $_POST['fatherName'] ?? '';
-    $guardianContact = $_POST['guardianContact'] ?? '';
+    
+    $address = sanitize($_POST['address'] ?? '');
+    $email = sanitize($_POST['email'] ?? '');
+    $contact = sanitize($_POST['contact'] ?? '');
+    $motherName = sanitize($_POST['motherName'] ?? '');
+    $fatherName = sanitize($_POST['fatherName'] ?? '');
+    $guardianContact = sanitize($_POST['guardianContact'] ?? '');
     $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirmPassword'] ?? '';
     $role = $_POST['role'] ?? 'Student';
     
-    $strongPasswordRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{6,}$/";
-    $contactRegex = "/^\+?\d{7,15}$/";
-    if (!preg_match($strongPasswordRegex, $password)) {
-        $signup_error = "Password must be at least 6 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
-    } elseif (!preg_match($contactRegex, $contact)) {
-        $signup_error = "Validation Error: Please enter a valid contact number (7 to 15 digits).";
-    } elseif (!preg_match($contactRegex, $guardianContact)) {
-        $signup_error = "Validation Error: Please enter a valid guardian contact number (7 to 15 digits).";
-    } else {
-        require_once '../includes/db.php';
+    // 3. Validation Logic
+    $errors = [];
+    if (empty($firstName) || empty($lastName)) $errors[] = "Full name is required.";
+    if (!validate_email($email)) $errors[] = "A valid email address is required.";
+    if (!validate_password($password)) $errors[] = "Password must be at least 8 characters, containing both letters and numbers.";
+    if ($password !== $confirmPassword) $errors[] = "Passwords do not match.";
+    if (!validate_phone($contact)) $errors[] = "Primary contact must be numeric.";
+    if (!validate_phone($guardianContact)) $errors[] = "Guardian contact must be numeric.";
+    if (!validate_date($dob)) $errors[] = "Please provide a valid date of birth.";
+
+    if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
         
         $otp = sprintf("%06d", mt_rand(1, 999999));
@@ -67,12 +75,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $signup_error = "Database Error: " . $e->getMessage();
             }
         }
+    } else {
+        $signup_error = format_errors($errors);
     }
 }
 
 // Bring in the global header which holds the CSS
 include_once '../includes/header.php';
 ?>
+
+<style>
+    /* Specific Spacing Optimization for Signup Page */
+    .registration-card .form-body {
+        padding: 40px 50px;
+        text-align: left; /* Ensure form content is left-aligned */
+    }
+    .registration-card .form-section {
+        margin-bottom: 35px;
+        padding-bottom: 30px;
+    }
+    .registration-card .section-title {
+        margin-bottom: 25px;
+        font-size: 1rem;
+        text-align: left;
+    }
+    .registration-card .input-row {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        margin-bottom: 25px;
+        width: 100%;
+    }
+    .registration-card .input-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .registration-card .input-group label {
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+    .registration-card .input-group input, 
+    .registration-card .input-group select {
+        padding: 14px 18px;
+        width: 100%;
+        box-sizing: border-box; /* Include padding in width */
+    }
+    .registration-card .role-selection {
+        gap: 20px;
+    }
+    .registration-card .role-content {
+        padding: 30px 20px;
+    }
+    .registration-card .form-actions {
+        margin-top: 20px;
+    }
+</style>
 
 <div class="auth-container">
     <div class="page">
@@ -85,6 +143,7 @@ include_once '../includes/header.php';
             </div>
 
             <form id="registrationForm" class="form-body" action="signup.php" method="POST">
+                <?php echo csrf_field(); ?>
                 
                 <?php if (!empty($signup_error)): ?>
                     <div class="alert error">

@@ -7,7 +7,41 @@ checkAuth(['Admin']);
 
 $pageTitle = "Add New User - Admin Portal";
 include_once '../includes/header.php';
+?>
 
+<style>
+    /* Specific Spacing Optimization for Admin Add User Page */
+    .form-container {
+        padding: 40px 50px !important;
+        text-align: left !important;
+    }
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 40px !important;
+    }
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+    .input-group label {
+        margin-bottom: 10px !important;
+        text-align: left;
+    }
+    .input-group input, 
+    .input-group select, 
+    .input-group textarea {
+        width: 100% !important;
+        box-sizing: border-box;
+        padding: 12px 16px !important;
+    }
+    .form-container p {
+        text-align: left;
+    }
+</style>
+
+<?php
 $message = '';
 $error = '';
 $preselectedRole = $_GET['role'] ?? 'Student';

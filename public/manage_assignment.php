@@ -24,7 +24,7 @@ if ($role == 'Teacher') {
 // Handle Delete
 if (isset($_GET['delete_id'])) {
     try {
-        $stmt = $pdo->prepare("DELETE FROM assignment WHERE id = ?");
+        $stmt = $pdo->prepare("DELETE FROM assignment WHERE assignment_id = ?");
         $stmt->execute([$_GET['delete_id']]);
         $message = "Assignment removed successfully!";
     } catch (PDOException $e) {
@@ -162,8 +162,8 @@ $default_date = date('Y-m-d\TH:i', strtotime('+7 days 23:59:00'));
                                         </td>
                                         <td style="padding: 20px; text-align: center;">
                                             <div style="display: flex; justify-content: center; gap: 15px;">
-                                                <a href="edit_assignment.php?id=<?php echo $a['id']; ?>" style="color: #6366f1; font-size: 1.1rem;"><i class="fas fa-edit"></i></a>
-                                                <a href="?course_id=<?php echo $selected_course; ?>&delete_id=<?php echo $a['id']; ?>" style="color: #f43f5e; font-size: 1.1rem;" onclick="return confirm('Delete this assignment permanently?')"><i class="fas fa-trash-alt"></i></a>
+                                                <a href="edit_assignment.php?id=<?php echo $a['assignment_id']; ?>" style="color: #6366f1; font-size: 1.1rem;"><i class="fas fa-edit"></i></a>
+                                                <a href="?course_id=<?php echo $selected_course; ?>&delete_id=<?php echo $a['assignment_id']; ?>" style="color: #f43f5e; font-size: 1.1rem;" onclick="return confirm('Delete this assignment permanently?')"><i class="fas fa-trash-alt"></i></a>
                                             </div>
                                         </td>
                                     </tr>

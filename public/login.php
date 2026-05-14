@@ -2,6 +2,8 @@
 session_start();
 require_once '../includes/jwttoken.php';
 require_once '../includes/db.php';
+require_once '../includes/csrf_helper.php';
+require_once '../includes/validation_helper.php';
 
 $pageTitle = "Academic Login";
 $login_error = "";
@@ -9,21 +11,29 @@ $login_success = "";
 $myJwtToken = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // 1. Validate CSRF
+    validate_csrf();
+
     $role = $_POST['role'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $email = sanitize($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
+    // 2. Validate Format
+    if (!validate_email($email)) {
+        $login_error = "Please enter a valid email address.";
+    } else {
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
     $stmt->execute([$email, $role]);
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password_hash'])) {
         if ($user['is_active'] == 1) {
-            createSession($user['email'], $user['role']);
-            $myJwtToken = createJWT($user['email'], $user['role']);
+            // Generate JWT and store in session
+            $_SESSION['token'] = createJWT($user['id'], $user['email'], $user['role']);
             
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['first_name'] = $user['first_name'];
+            $_SESSION['role'] = $user['role'];
             
             if ($role === 'Admin') {
                 header("Location: admin_dashboard.php");
@@ -40,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         $login_error = "Login Failed: Invalid credentials or role.";
+    }
     }
 }
 
@@ -58,6 +69,7 @@ include_once '../includes/header.php';
             </div>
 
             <form id="loginForm" class="form-body" action="login.php" method="POST">
+                <?php echo csrf_field(); ?>
 
                 <?php if (!empty($login_error)): ?>
                     <div class="alert error">

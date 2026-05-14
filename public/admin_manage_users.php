@@ -165,4 +165,74 @@ try {
     </main>
 </div>
 
+<script>
+document.getElementById('userSearch').addEventListener('input', function(e) {
+    const query = e.target.value;
+    const role = '<?php echo $queryRole; ?>';
+    
+    fetch(`api_search_users.php?q=${encodeURIComponent(query)}&role=${encodeURIComponent(role)}`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('table tbody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="padding: 40px; text-align: center; color: #94a3b8;">No records found matching your search.</td></tr>';
+                return;
+            }
+            
+            data.forEach(user => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #f1f5f9';
+                row.style.transition = 'all 0.2s ease';
+                
+                const fullName = `${user.first_name} ${user.last_name}`;
+                const roleColor = user.role === 'Teacher' ? '#e0f2fe' : '#fef3c7';
+                const roleTxtColor = user.role === 'Teacher' ? '#0369a1' : '#b45309';
+                const statusColor = user.is_active == 1 ? '#22c55e' : '#94a3b8';
+                const statusTxt = user.is_active == 1 ? 'Active' : 'Pending';
+                
+                let detailTxt = '';
+                if (user.role === 'Student') {
+                    detailTxt = `Class: ${user.class_name ? user.class_name : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>'}`;
+                } else if (user.role === 'Teacher') {
+                    detailTxt = `Dept: ${user.department ? user.department : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>'}`;
+                }
+
+                row.innerHTML = `
+                    <td style="padding: 20px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-weight: 800; color: #1e293b;">${fullName}</span>
+                            <span style="font-size: 0.85rem; color: #64748b;">${user.email}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 20px;">
+                        <span style="background: ${roleColor}; color: ${roleTxtColor}; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.8rem;">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td style="padding: 20px;">
+                        <span style="font-size: 0.9rem; color: #475569;">${detailTxt}</span>
+                    </td>
+                    <td style="padding: 20px;">
+                        <span style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: ${statusColor};"></div>
+                            <span style="font-size: 0.9rem; color: #475569;">${statusTxt}</span>
+                        </span>
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        <div style="display: flex; justify-content: center; gap: 10px;">
+                            <a href="admin_edit_user.php?id=${user.id}" class="action-btn" style="color: #6366f1; font-size: 1.1rem;" title="Edit User"><i class="fas fa-edit"></i></a>
+                            <a href="?delete_id=${user.id}" class="action-btn" style="color: #f43f5e; font-size: 1.1rem;" onclick="return confirm('Are you sure you want to delete this user?')" title="Delete User"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching users:', error));
+});
+</script>
+
 <?php include_once '../includes/footer.php'; ?>
+

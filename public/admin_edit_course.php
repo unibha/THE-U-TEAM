@@ -45,7 +45,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             $stmt = $pdo->prepare("UPDATE courses SET course_name = ?, course_code = ?, teacher_id = ? WHERE id = ?");
             $stmt->execute([$course_name, $course_code, $teacher_id, $courseId]);
-            $message = "Course updated successfully! <a href='admin_manage_courses.php' style='color: #166534; font-weight: 700;'>Return to list</a>";
+            
+            // Trigger Notifications
+            require_once '../includes/notification_helper.php';
+            
+            // 1. Notify the newly assigned teacher
+            if ($teacher_id) {
+                $teacherUser = $pdo->prepare("SELECT user_id FROM teachers WHERE id = ?");
+                $teacherUser->execute([$teacher_id]);
+                $tUid = $teacherUser->fetchColumn();
+                if ($tUid) {
+                    sendNotification($tUid, "Course Update: $course_name", "You have been assigned as the lead instructor for $course_name ($course_code).", 'Academic');
+                }
+            }
+
+            // 2. Notify all enrolled students about the instructor change
+            notifyEnrolledStudents($courseId, "Course Update: $course_name", "The instructor for $course_name has been updated by the administration.", 'Academic');
+
+            $message = "Course updated successfully and notifications sent!";
             $course['course_name'] = $course_name;
             $course['course_code'] = $course_code;
             $course['teacher_id'] = $teacher_id;

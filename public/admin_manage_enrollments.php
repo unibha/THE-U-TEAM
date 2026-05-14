@@ -139,7 +139,14 @@ if ($selected_course) {
                 <?php if ($error): ?> <div style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 12px; margin-bottom: 25px;"><?php echo $error; ?></div> <?php endif; ?>
 
                 <?php if ($selected_course): ?>
-                    <h2 style="font-size: 1.6rem; color: #1e293b; font-weight: 800; margin-bottom: 25px;">Classroom Roster</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="font-size: 1.6rem; color: #1e293b; font-weight: 800; margin-bottom: 0;">Classroom Roster</h2>
+                        <div class="search-wrapper" style="margin-left: auto;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="rosterSearch" placeholder="Filter roster..." style="background: #fff; border: 1px solid #e2e8f0; color: #1e293b; width: 250px;">
+                        </div>
+                    </div>
+                    
                     <div class="table-container" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead style="background: #f8fafc;">
@@ -152,7 +159,7 @@ if ($selected_course) {
                             </thead>
                             <tbody>
                                 <?php if (empty($enrolled_students)): ?>
-                                    <tr><td colspan="3" style="padding: 40px; text-align: center; color: #94a3b8;">No members currently enrolled for this module.</td></tr>
+                                    <tr><td colspan="4" style="padding: 40px; text-align: center; color: #94a3b8;">No members currently enrolled for this module.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($enrolled_students as $s): ?>
                                     <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -200,4 +207,41 @@ if ($selected_course) {
     </main>
 </div>
 
+<script>
+if (document.getElementById('rosterSearch')) {
+    document.getElementById('rosterSearch').addEventListener('input', function(e) {
+        const query = e.target.value;
+        const courseId = '<?php echo $selected_course; ?>';
+        
+        fetch(`api_search_enrollments.php?q=${encodeURIComponent(query)}&course=${courseId}`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('table tbody');
+                tbody.innerHTML = '';
+                
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="padding: 40px; text-align: center; color: #94a3b8;">No members found.</td></tr>';
+                    return;
+                }
+                
+                data.forEach(s => {
+                    const row = document.createElement('tr');
+                    row.style.borderBottom = '1px solid #f1f5f9';
+                    row.innerHTML = `
+                        <td style="padding: 20px; font-weight: 800; color: #1e293b;">${s.first_name} ${s.last_name}</td>
+                        <td style="padding: 20px; color: #475569; font-weight: 700;">${s.class_name || 'N/A'}</td>
+                        <td style="padding: 20px; color: #64748b; font-size: 0.9rem;">${s.email}</td>
+                        <td style="padding: 20px; text-align: center;">
+                            <a href="?course_id=${courseId}&remove_id=${s.enrollment_id}" style="color: #f43f5e; font-size: 1.1rem;" onclick="return confirm('Remove student from course?')"><i class="fas fa-user-minus"></i></a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+}
+</script>
+
 <?php include_once '../includes/footer.php'; ?>
+

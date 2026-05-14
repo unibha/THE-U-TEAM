@@ -1,50 +1,71 @@
 <?php
-// session.php
-// This file specifically handles creating standard PHP sessions or JWT tokens.
+/**
+ * JWT Utility - Manages JSON Web Tokens for Academic Management System
+ */
+
+define('JWT_SECRET', 'ams_super_secret_signature_key');
 
 /**
- * Creates a standard PHP Session
+ * Generates a JSON Web Token (JWT)
  */
-function createSession($username, $role) {
-    $_SESSION['user'] = $username;
-    $_SESSION['role'] = $role;
-    $_SESSION['login_time'] = time();
-}
-
-/**
- * Generates a JSON Web Token (JWT) manually without external libraries
- */
-function createJWT($username, $role) {
-    // Define a secret key to sign the token (Keep this safe!)
-    $secret_key = 'ams_super_secret_signature_key';
-    
-    // 1. Create token header (algorithm & token type)
+function createJWT($userId, $username, $role) {
     $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
     
-    // 2. Create token payload (user data & expiration time)
     $payload = json_encode([
-        'user' => $username,
+        'user_id' => $userId,
+        'username' => $username,
         'role' => $role,
         'iat'  => time(),                      // Issued at time
         'exp'  => time() + (60 * 60 * 2)       // Expires in 2 hours
     ]);
     
-    // 3. Encode Header & Payload to Base64Url
     $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
     $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
 
-    // 4. Create Security Signature
-    $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $secret_key, true);
-    
-    // 5. Encode Signature to Base64Url
+    $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, JWT_SECRET, true);
     $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
-    // 6. Combine all three pieces to form the final JWT Token!
-    $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+    return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+}
 
-    // Optional: Store the JWT inside a secured HttpOnly cookie right away
-    setcookie("jwt_token", $jwt, time() + (60 * 60 * 2), "/", "", false, true);
+/**
+ * Validates a JWT Token
+ * Returns the decoded payload if valid, false otherwise
+ */
+function validateJWT($jwt) {
+    $parts = explode('.', $jwt);
+    if (count($parts) !== 3) return false;
 
+    list($header, $payload, $signature) = $parts;
+
+    // Verify Signature
+    $validSig = hash_hmac('sha256', "$header.$payload", JWT_SECRET, true);
+    $validSigEncoded = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($validSig));
+
+    if ($signature !== $validSigEncoded) return false;
+
+    // Decode Payload
+    $data = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $payload)), true);
+
+    // Check Expiration
+    if (isset($data['exp']) && $data['exp'] < time()) {
+        return 'expired';
+    }
+
+    return $data;
+}
+
+/**
+ * Refresh JWT if near expiry (e.g. less than 30 mins left)
+ */
+function refreshTokenIfNeeded($jwt) {
+    $data = validateJWT($jwt);
+    if ($data && is_array($data)) {
+        $timeLeft = $data['exp'] - time();
+        if ($timeLeft < (30 * 60)) { // 30 mins
+            return createJWT($data['user_id'], $data['username'], $data['role']);
+        }
+    }
     return $jwt;
 }
 ?>

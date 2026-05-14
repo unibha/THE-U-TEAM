@@ -20,7 +20,7 @@ try {
         SELECT a.*, c.course_name, c.teacher_id
         FROM assignment a
         JOIN courses c ON a.course_id = c.id
-        WHERE a.id = ?
+        WHERE a.assignment_id = ?
     ");
     $stmt->execute([$assignmentId]);
     $assignment = $stmt->fetch();
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Title is mandatory.";
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE assignment SET title = ?, description = ?, due_date = ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE assignment SET title = ?, description = ?, due_date = ? WHERE assignment_id = ?");
             $stmt->execute([$title, $description, $due_date, $assignmentId]);
             $message = "Assignment updated successfully! <a href='manage_assignment.php?course_id=" . $assignment['course_id'] . "' style='color: #166534; font-weight: 700;'>Return to List</a>";
             

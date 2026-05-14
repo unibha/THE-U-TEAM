@@ -90,6 +90,10 @@ try {
             <p>Admin Portal > Manage Courses</p>
         </div>
         <div class="header-tools">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="courseSearch" placeholder="Search courses or instructors...">
+            </div>
             <div class="header-icons" style="margin-left: 20px; display: flex; gap: 15px; align-items: center;">
                 <a href="admin_dashboard.php" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; transition: 0.3s ease; background: rgba(255,255,255,0.1);"><i class="fas fa-th-large" style="margin-right: 8px;"></i>Dashboard</a>
                 <a href="logout.php" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;">Logout</a>
@@ -183,4 +187,52 @@ try {
     </main>
 </div>
 
+<script>
+document.getElementById('courseSearch').addEventListener('input', function(e) {
+    const query = e.target.value;
+    
+    fetch(`api_search_courses.php?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('table tbody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="padding: 40px; text-align: center; color: #94a3b8;">No courses found.</td></tr>';
+                return;
+            }
+            
+            data.forEach(course => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #f1f5f9';
+                
+                const instructor = course.teacher_id 
+                    ? `<span style="color: #475569; font-weight: 600;">Prof. ${course.first_name} ${course.last_name}</span>`
+                    : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>';
+
+                row.innerHTML = `
+                    <td style="padding: 20px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-weight: 800; color: #1e293b;">${course.course_name}</span>
+                            <span style="font-size: 0.85rem; color: #8b5cf6; font-weight: 700;">${course.course_code}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 20px;">
+                        ${instructor}
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        <div style="display: flex; justify-content: center; gap: 15px;">
+                            <a href="admin_edit_course.php?id=${course.id}" style="color: #6366f1; font-size: 1.1rem;"><i class="fas fa-edit"></i></a>
+                            <a href="?delete_id=${course.id}" style="color: #f43f5e; font-size: 1.1rem;" onclick="return confirm('Delete this course?')"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching courses:', error));
+});
+</script>
+
 <?php include_once '../includes/footer.php'; ?>
+

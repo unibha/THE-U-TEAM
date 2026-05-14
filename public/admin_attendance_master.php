@@ -273,4 +273,92 @@ $courses = $pdo->query("SELECT id, course_name, course_code FROM courses ORDER B
     </main>
 </div>
 
+<script>
+function refreshAttendance() {
+    const search = document.querySelector('input[name="search"]').value;
+    const role = document.querySelector('select[name="role_filter"]').value;
+    const course = document.querySelector('select[name="course_filter"]').value;
+    const date = document.querySelector('input[name="date_filter"]').value;
+
+    fetch(`api_search_attendance.php?q=${encodeURIComponent(search)}&role=${encodeURIComponent(role)}&course=${encodeURIComponent(course)}&date=${encodeURIComponent(date)}`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('table tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="padding: 40px; text-align: center; color: #94a3b8;">No members matching your search parameters.</td></tr>';
+                return;
+            }
+
+            data.forEach(r => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #f1f5f9';
+
+                const roleColor = r.role === 'Teacher' ? '#8b5cf6' : '#2563eb';
+                const statusBorder = r.record_id ? '#e2e8f0' : '#fecaca';
+                const statusBg = r.record_id ? '#fff' : '#fff5f5';
+
+                let options = `
+                    <option value="" ${!r.record_id ? 'selected' : ''} disabled>-- Mark Standing --</option>
+                    <option value="Present" ${r.status === 'Present' ? 'selected' : ''}>Present</option>
+                    <option value="Absent" ${r.status === 'Absent' ? 'selected' : ''}>Absent</option>
+                    <option value="Late" ${r.status === 'Late' ? 'selected' : ''}>Late</option>
+                `;
+                if (r.role === 'Teacher') {
+                    options += `<option value="On Leave" ${r.status === 'On Leave' ? 'selected' : ''}>On Leave</option>`;
+                }
+
+                const actionIcon = r.record_id 
+                    ? `<a href="?search=${encodeURIComponent(search)}&course_filter=${course}&date_filter=${date}&id=${r.record_id}&type=${r.role}&delete_record=1" 
+                          style="color: #f43f5e; font-size: 1.1rem; text-decoration: none;" 
+                          onclick="return confirm('Permanently remove this presence record?')" title="Delete Record">
+                           <i class="fas fa-trash-alt"></i>
+                       </a>`
+                    : `<span style="color: #94a3b8; font-size: 0.8rem; font-style: italic;">Standby</span>`;
+
+                row.innerHTML = `
+                    <td style="padding: 20px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-weight: 800; color: #1e293b;">${r.first_name} ${r.last_name}</span>
+                            <span style="font-size: 0.8rem; font-weight: 700; color: ${roleColor}; text-transform: uppercase;">${r.role}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 20px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 0.9rem; color: #475569; font-weight: 600;">${r.course_name}</span>
+                            <span style="font-size: 0.8rem; color: #94a3b8;">${r.course_code}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        <form action="" method="POST" style="display: flex; justify-content: center;">
+                            <input type="hidden" name="type" value="${r.role}">
+                            <input type="hidden" name="record_id" value="${r.record_id || ''}">
+                            <input type="hidden" name="target_id" value="${r.target_id}">
+                            <input type="hidden" name="date" value="${r.attendance_date}">
+                            
+                            <select name="new_status" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 10px; border: 1px solid ${statusBorder}; font-size: 0.85rem; font-weight: 700; background: ${statusBg}; cursor: pointer;">
+                                ${options}
+                            </select>
+                            <input type="hidden" name="update_status" value="1">
+                        </form>
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        ${actionIcon}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching attendance:', error));
+}
+
+// Add event listeners to all filter inputs
+document.querySelector('input[name="search"]').addEventListener('input', refreshAttendance);
+document.querySelector('select[name="role_filter"]').addEventListener('change', refreshAttendance);
+document.querySelector('select[name="course_filter"]').addEventListener('change', refreshAttendance);
+document.querySelector('input[name="date_filter"]').addEventListener('change', refreshAttendance);
+</script>
+
 <?php include_once '../includes/footer.php'; ?>
+
