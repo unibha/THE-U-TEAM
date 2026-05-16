@@ -44,7 +44,7 @@ include_once '../includes/notification_logic.php';
                 
                 <!-- Notification Bell -->
                 <div class="notif-wrapper" onclick="toggleNotifDropdown(event)">
-                    <i class="fas fa-bell" style="color: #fff; font-size: 1.2rem;"></i>
+                    <a href="notifications.php" style="color: #fff; display: flex; align-items: center;"><i class="fas fa-bell" style="color: #fff; font-size: 1.2rem;"></i></a>
                     <?php if (isset($unreadCount) && $unreadCount > 0): ?>
                         <span class="notif-badge"><?php echo $unreadCount; ?></span>
                     <?php endif; ?>
