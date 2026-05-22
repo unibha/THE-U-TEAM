@@ -1,7 +1,7 @@
 :root {
-    --brand-gradient: linear-gradient(135deg, #f43f5e, #8b5cf6);
+    --brand-gradient: #1a365d;
     --glass-bg: rgba(255, 255, 255, 0.95);
-    --glass-border: rgba(241, 148, 148, 0.2);
+    --glass-border: rgba(59, 130, 246, 0.2);
 }
 
 body {
@@ -29,12 +29,12 @@ body {
 .registration-card {
     background: #fff;
     border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.1);
     overflow: hidden;
 }
 
 .card-header {
-    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+    background: #1a365d;
     color: #fff;
     padding: 50px 40px;
     text-align: center;
@@ -57,7 +57,7 @@ body {
 }
 
 .form-section {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     padding-bottom: 40px;
     border-bottom: 2px dashed #f1f5f9;
 }
@@ -70,7 +70,7 @@ body {
 
 .section-title {
     font-size: 1.1rem;
-    color: #8b5cf6;
+    color: #3b82f6;
     margin-bottom: 35px;
     text-transform: uppercase;
     font-weight: 800;
@@ -80,13 +80,14 @@ body {
 .input-row {
     display: flex;
     gap: 40px;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
 }
 
 .input-group {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .input-group label {
@@ -109,10 +110,10 @@ body {
 
 .input-group input:focus,
 .input-group select:focus {
-    border-color: #8b5cf6;
+    border-color: #3b82f6;
     background: #fff;
     outline: none;
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 .date-group {
@@ -145,14 +146,14 @@ body {
 }
 
 .role-card input:checked+.role-content {
-    border-color: #8b5cf6;
-    background: #faf5ff;
+    border-color: #3b82f6;
+    background: #f0f7ff;
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
 }
 
 .btn-submit {
-    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+    background: #1a365d;
     color: #fff;
     font-size: 1.2rem;
     font-weight: 800;
@@ -162,25 +163,25 @@ body {
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(244, 63, 94, 0.2);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
 }
 
 .btn-submit:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(244, 63, 94, 0.3);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
 }
 
 /* Dashboard Styles */
 .dashboard-container {
     display: flex;
     flex-direction: column;
-    max-width: 1200px;
-    margin: 40px auto;
+    max-width: 100%;
+    margin: 0;
     background: #fff;
-    border-radius: 40px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.1);
-    min-height: calc(100vh - 80px);
+    box-shadow: none;
+    min-height: 100vh;
 }
 
 .sidebar {
@@ -199,7 +200,7 @@ body {
 }
 
 .sidebar-header .logo {
-    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+    background: #1a365d;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -224,8 +225,8 @@ body {
 
 .sidebar-nav li.active a,
 .sidebar-nav a:hover {
-    background: #faf5ff;
-    color: #8b5cf6;
+    background: #f0f7ff;
+    color: #3b82f6;
 }
 
 /* New Modern Header (Reference Image Style) */
@@ -236,8 +237,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 0 0 40px 40px;
-    box-shadow: 0 15px 35px rgba(244, 63, 94, 0.15);
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     z-index: 10;
 }
 
@@ -349,7 +350,7 @@ body {
     border-radius: 24px;
     display: flex;
     align-items: center;
-    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.04);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.04);
 }
 
 .stat-icon {
@@ -361,8 +362,8 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background: #faf5ff;
-    color: #8b5cf6;
+    background: #f0f7ff;
+    color: #3b82f6;
 }
 
 .stat-info p {
@@ -407,7 +408,7 @@ body {
 
 .attendance-visual .circle-progress {
     fill: none;
-    stroke: #8b5cf6;
+    stroke: #3b82f6;
     stroke-width: 8;
     stroke-linecap: round;
     transition: stroke-dasharray 0.5s ease;
@@ -443,57 +444,12 @@ body {
 
 .assignment-status-card i {
     font-size: 2rem;
-    color: #8b5cf6;
+    color: #3b82f6;
     margin-bottom: 15px;
     display: block;
 }
 
-/* Teacher Dashboard Tiled Grid (Image Style) */
-.teacher-grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 40px;
-}
 
-.teacher-tile-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 50px 30px;
-    text-align: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    text-decoration: none;
-    color: #1e293b;
-    border: 1px solid rgba(241, 148, 148, 0.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-}
-
-.teacher-tile-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
-}
-
-.teacher-tile-card i {
-    font-size: 2.2rem;
-    color: #475569;
-    margin-bottom: 20px;
-    display: block;
-    opacity: 0.8;
-}
-
-.teacher-tile-card span {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #475569;
-    display: block;
-}
-
-.teacher-tile-card:hover i,
-.teacher-tile-card:hover span {
-    color: #8b5cf6;
-    opacity: 1;
-}
 
 /* Course Page (Compact Layout) Styles */
 .compact-sidebar {
@@ -536,7 +492,7 @@ body {
 .compact-sidebar .sidebar-nav li.active a,
 .compact-sidebar .sidebar-nav a:hover {
     background: #f8fafc;
-    color: #8b5cf6;
+    color: #3b82f6;
 }
 
 .course-grid-container {
@@ -552,14 +508,14 @@ body {
     padding: 60px 20px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(241, 148, 148, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.05);
     transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .course-tile-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.08);
+    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.08);
 }
 
 .course-tile-card h3 {
@@ -672,7 +628,7 @@ td {
 }
 
 .login-link a {
-    color: #8b5cf6;
+    color: #3b82f6;
     text-decoration: none;
     font-weight: 800;
     margin-left: 5px;
@@ -680,7 +636,7 @@ td {
 }
 
 .login-link a:hover {
-    color: #f43f5e;
+    color: #1a365d;
     text-decoration: underline;
 }
 
@@ -715,8 +671,14 @@ td {
         padding: 30px;
     }
 
-    .teacher-grid-wrapper {
+
+
+    .course-grid-container {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .attendance-report-container {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -749,6 +711,49 @@ td {
     .attendance-report-container {
         grid-template-columns: 1fr;
     }
+
+    /* Dashboard Header Responsiveness */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 25px 20px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .header-tools {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .search-wrapper {
+        width: 100%;
+    }
+
+    .search-wrapper input {
+        width: 100% !important;
+    }
+
+    .header-icons {
+        margin-left: 0 !important;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Form and Selection Roster Adjustments */
+    .selection-bar form {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 15px !important;
+    }
+
+    .selection-bar button, 
+    .selection-bar select,
+    .selection-bar div {
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 640px) {
@@ -776,6 +781,7 @@ td {
     .sidebar-nav ul {
         display: flex;
         justify-content: space-around;
+        padding: 0;
     }
 
     .sidebar-nav a {
@@ -801,15 +807,38 @@ td {
     }
 
     .main-content {
-        padding: 20px;
+        padding: 20px 15px;
+    }
+
+    .course-grid-container {
+        grid-template-columns: 1fr;
     }
 
     table {
         min-width: 600px;
     }
 
-    .teacher-grid-wrapper {
-        grid-template-columns: 1fr;
+
+
+    /* Interactive tables wrapper scrolling */
+    .table-container,
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+    }
+
+    /* Timetable card layout stacked layout */
+    .timetable-card {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        padding: 20px !important;
+        border-radius: 20px !important;
+    }
+
+    .timetable-card div:last-child {
+        text-align: left !important;
     }
 }
 
@@ -835,10 +864,10 @@ td {
 }
 
 .otp-digit:focus {
-    border-color: #8b5cf6;
+    border-color: #3b82f6;
     background: #fff;
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
     outline: none;
 }
 
@@ -854,3 +883,413 @@ td {
         border-radius: 12px;
     }
 }
+
+/* --- Advanced Global Responsiveness Engine --- */
+@media (max-width: 768px) {
+    /* Stack any div or section styled with inline flex-row inside the main content */
+    .main-content div[style*="display: flex;"][style*="justify-content: space-between;"],
+    .main-content div[style*="display: flex;"][style*="justify-content: space-around;"],
+    .main-content div[style*="display: flex;"][style*="justify-content: space-between"],
+    .main-content div[style*="display: flex;"][style*="justify-content: space-around"],
+    .main-content div[style*="display: flex"][style*="justify-content"],
+    .main-content section[style*="display: flex;"][style*="justify-content: space-between;"],
+    .main-content section[style*="display: flex;"][style*="justify-content: space-between"],
+    .main-content section[style*="display: flex"][style*="justify-content"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 20px !important;
+        padding: 20px !important;
+    }
+
+    /* Force children of stacked inline-flex elements to align cleanly and occupy full width */
+    .main-content div[style*="display: flex"][style*="justify-content"] > div,
+    .main-content section[style*="display: flex"][style*="justify-content"] > div,
+    .main-content div[style*="display: flex"][style*="justify-content"] > form,
+    .main-content section[style*="display: flex"][style*="justify-content"] > form {
+        width: 100% !important;
+        text-align: left !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Ensure flex form controls scale down beautifully */
+    .main-content form[style*="display: flex"],
+    .main-content form[style*="display:flex"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px !important;
+    }
+
+    /* Stack any horizontal day selectors or tabs lists and make them scrollable */
+    .day-selector-container,
+    section[style*="overflow-x: auto"] {
+        width: 100%;
+        overflow-x: auto !important;
+        display: flex !important;
+        flex-direction: row !important; /* Keep tabs list horizontal and scrollable */
+        gap: 10px !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px !important;
+    }
+    
+    /* Make inline action rows inside view details fit cleanly */
+    div[style*="display: flex; justify-content: space-between; align-items: center;"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px !important;
+    }
+}
+
+/* ==========================================================================
+   Split Screen Login Styles (Mockup Redesign)
+   ========================================================================== */
+.split-login-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+.login-left {
+    flex: 2;
+    background-color: #1a365d; /* Dark navy */
+    color: #ffffff;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.login-right {
+    flex: 3;
+    background-color: #ffffff;
+    padding: 60px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form-wrapper {
+    width: 100%;
+    max-width: 480px;
+}
+
+/* Left Brand Column Styling */
+.brand-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 80px;
+}
+
+.brand-logo {
+    font-size: 2.2rem;
+}
+
+.brand-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.brand-content {
+    margin-bottom: 40px;
+}
+
+.brand-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.brand-subtitle {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 40px 0 0 0;
+}
+
+.feature-list li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 1.05rem;
+    margin-bottom: 22px;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.feature-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #3b82f6; /* Bright blue bullet dot */
+    border-radius: 50%;
+}
+
+/* Right Form Column Styling */
+.form-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 40px;
+}
+
+.form-body-new {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-section-new {
+    margin-bottom: 30px;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 8px;
+}
+
+/* Role Selection Grid */
+.role-selection-new {
+    display: flex;
+    gap: 16px;
+}
+
+.role-card-new {
+    flex: 1;
+    cursor: pointer;
+}
+
+.role-card-new input {
+    display: none;
+}
+
+.role-content-new {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px 12px;
+    text-align: center;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.role-content-new i {
+    font-size: 1.5rem;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.role-content-new span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+    transition: color 0.2s ease;
+}
+
+.role-content-new:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.role-card-new input:checked + .role-content-new {
+    border: 1.5px solid #1a365d;
+    background-color: #f0f7ff;
+}
+
+.role-card-new input:checked + .role-content-new i {
+    color: #1a365d;
+}
+
+.role-card-new input:checked + .role-content-new span {
+    color: #1a365d;
+    font-weight: 700;
+}
+
+/* Credentials Inputs */
+.input-group-new {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group-new label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.input-group-new input {
+    width: 100%;
+    background-color: #2b2b2b; /* Custom dark rectangular inputs */
+    color: #ffffff;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-group-new input:focus {
+    border-color: #3b82f6;
+    background-color: #202020;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.forgot-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -8px;
+    margin-bottom: 24px;
+}
+
+.forgot-link {
+    font-size: 0.9rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+/* Actions & Buttons */
+.form-actions-new {
+    margin-top: 10px;
+}
+
+.btn-submit-new {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit-new:hover {
+    background-color: #1a365d;
+    color: #ffffff;
+    border-color: #1a365d;
+}
+
+.signup-prompt {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.signup-prompt a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.signup-prompt a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Media Queries for split layout */
+@media (max-width: 992px) {
+    .login-left {
+        padding: 50px 40px;
+    }
+    .login-right {
+        padding: 50px 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .split-login-container {
+        flex-direction: column;
+    }
+    .login-left {
+        padding: 40px 30px;
+        flex: none;
+        align-items: center;
+        text-align: center;
+    }
+    .brand-header {
+        margin-bottom: 30px;
+    }
+    .brand-content {
+        margin-bottom: 20px;
+    }
+    .brand-title {
+        font-size: 2rem;
+    }
+    .feature-list {
+        display: none; /* Hide feature list on small screens to save space */
+    }
+    .login-right {
+        padding: 40px 20px;
+        flex: none;
+    }
+}
+
+/* Ensure all form controls use border-box sizing to prevent overflow and overlapping layout bugs */
+input, select, textarea, button {
+    box-sizing: border-box;
+}
+
+/* Selection Grid Form for Attendance Master Hub */
+.selection-grid-form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.5fr) minmax(130px, 1fr) minmax(160px, 1.2fr) minmax(150px, 200px) minmax(120px, 150px);
+    gap: 20px;
+    align-items: flex-end;
+}
+
+@media (max-width: 1024px) {
+    .selection-grid-form {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .selection-grid-form {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
