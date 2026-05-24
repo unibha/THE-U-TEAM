@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../config.php';
+
 
 ?>
 <!DOCTYPE html>
@@ -13,6 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Link to the centralized CSS -->
-    <link rel="stylesheet" href="../assets/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo ROOT_URL; ?>/assets/style.css?v=<?php echo time(); ?>">
 </head>
 <body>

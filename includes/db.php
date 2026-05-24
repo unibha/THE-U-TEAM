@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../config.php';
+
 $host = '127.0.0.1';
 $db   = 'ams_db';
 $user = 'root';
@@ -14,6 +16,9 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
+    // Set Timezone for consistent timeAgo behavior
+    date_default_timezone_set('Asia/Kathmandu');
+    $pdo->exec("SET time_zone = '+05:45'");
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
